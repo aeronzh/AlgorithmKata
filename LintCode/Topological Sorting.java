@@ -36,9 +36,12 @@ public class Solution {
                 queue.offer(node);
             }
         }
-
+        
+        // if (queue.isEmpty()) {
+        //     cycle!
+        // }
+        
         while (!queue.isEmpty()) {
-
             int size = queue.size();
 
             for (int i = 0; i < size; i++) {
@@ -52,9 +55,115 @@ public class Solution {
                     }
                 }
             }
-
         }
 
         return result;
+    }
+}
+
+// DFS
+public class Solution {
+    /**
+     * @param graph: A list of Directed graph node
+     * @return: Any topological order for the given graph.
+     */    
+    public ArrayList<DirectedGraphNode> topSort(ArrayList<DirectedGraphNode> graph) {
+        // write your code here
+        ArrayList<DirectedGraphNode> result = new ArrayList<DirectedGraphNode>();
+        
+        if (graph == null || graph.size() == 0) {
+            return result;
+        }
+        
+        HashMap<DirectedGraphNode, Integer> status = new HashMap<DirectedGraphNode, Integer>();
+        // status: 0 => unvisited, 1 => visiting, 2 => visited
+        
+        for (DirectedGraphNode n : graph) {
+            status.put(n, 0);
+        }
+        
+        for (DirectedGraphNode n : graph) {
+            if (status.get(n) == 0) {
+                dfs(status, result, n);
+            }
+        }
+        
+        Collections.reverse(result);
+        return result;
+    }
+    
+    private void dfs(HashMap<DirectedGraphNode, Integer> status, List<DirectedGraphNode> result, DirectedGraphNode node) {
+        
+        status.put(node, 1);
+        
+        for (DirectedGraphNode nb : node.neighbors) {
+            // detect cycle
+            // if (status.get(nb) == 1) cycle!
+            if (status.get(nb) == 0) {
+                dfs(status, result, nb);
+            }
+        }
+        
+        status.put(node, 2);
+        result.add(node);
+    }
+}
+
+// iterative DFS
+public class Solution {
+    /**
+     * @param graph: A list of Directed graph node
+     * @return: Any topological order for the given graph.
+     */    
+    public ArrayList<DirectedGraphNode> topSort(ArrayList<DirectedGraphNode> graph) {
+        // write your code here
+        ArrayList<DirectedGraphNode> result = new ArrayList<DirectedGraphNode>();
+        
+        if (graph == null || graph.size() == 0) {
+            return result;
+        }
+        
+        HashMap<DirectedGraphNode, Integer> status = new HashMap<DirectedGraphNode, Integer>();
+        
+        for (int i = 0; i < graph.size(); i++) {
+            status.put(graph.get(i), 0);
+        }
+        
+        for (DirectedGraphNode n : graph) {
+            if (status.get(n) == 0) {
+                dfs(status, result, n);
+            }
+        }
+        
+        Collections.reverse(result);
+        
+        return result;
+    }
+    
+    private void dfs(HashMap<DirectedGraphNode, Integer> status, ArrayList<DirectedGraphNode> result, DirectedGraphNode node) {
+        
+        Stack<DirectedGraphNode> stack = new Stack<DirectedGraphNode>();
+        stack.push(node);
+        status.put(node, 1);
+        
+        while (!stack.isEmpty()) {
+            DirectedGraphNode u = stack.peek();
+            DirectedGraphNode v = null;
+            
+            for (DirectedGraphNode nb : u.neighbors) {
+                if (status.get(nb) == 0) {
+                    v = nb;
+                    break;
+                }
+            }
+            
+            if (v == null) {
+                result.add(stack.pop());
+                status.put(u, 2);
+            } else {
+                stack.push(v);
+                status.put(v, 1);
+            }
+        }
     }
 }
