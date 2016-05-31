@@ -21,29 +21,27 @@ public class Solution {
      */
     public int trapRainWater(int[] heights) {
         // write your code here
-        if (heights == null || heights.length < 3) return 0;
-
-        int[] left = new int[heights.length];
-        left[0] = heights[0];
-        int[] right = new int[heights.length];
-        right[heights.length - 1] = heights[heights.length - 1];
-        int sum = 0;
-
+        if (heights == null || heights.length == 0) {
+            return 0;
+        }
+        
+        int[] leftMax = new int[heights.length];
+        leftMax[0] = heights[0];
         for (int i = 1; i < heights.length; i++) {
-            left[i] = Math.max(left[i - 1], heights[i]);
+            leftMax[i] = Math.max(leftMax[i - 1], heights[i]);
         }
-
+        
+        int[] rightMax = new int[heights.length];
+        rightMax[heights.length - 1] = heights[heights.length - 1];
         for (int i = heights.length - 2; i >= 0; i--) {
-            right[i] = Math.max(right[i + 1], heights[i]);
+            rightMax[i] = Math.max(rightMax[i + 1], heights[i]);
         }
-
+        
+        int sum = 0;
         for (int i = 1; i < heights.length - 1; i++) {
-            int lower = Math.min(left[i - 1], right[i + 1]);
-            if (lower > heights[i]) {
-                sum += lower - heights[i];
-            }
+            sum += Math.max(0, Math.min(leftMax[i - 1], rightMax[i + 1]) - heights[i]);
         }
-
+        
         return sum;
     }
 }
@@ -99,31 +97,29 @@ public class Solution {
      */
     public int trapRainWater(int[] heights) {
         // write your code here
-        if (heights == null || heights.length < 3) return 0;
-
-        int left = 0;;
-        int right = heights.length - 1;
+        if (heights == null || heights.length == 0) {
+            return 0;
+        }
+        
+        int left = 1;
+        int right = heights.length - 2;
+        int leftMax = heights[0];
+        int rightMax = heights[heights.length - 1];
+        
         int sum = 0;
-
-        int leftHeight = heights[0];
-        int rightHeight = heights[heights.length - 1];
-        while (left + 1 < right) {
-            if (leftHeight < rightHeight) {
+        
+        while (left <= right) {
+            if (leftMax < rightMax) {
+                sum += Math.max(0, leftMax - heights[left]);
+                leftMax = Math.max(leftMax, heights[left]);
                 left++;
-                if (leftHeight > heights[left]) {
-                    sum += leftHeight - heights[left];
-                } else {
-                    leftHeight = heights[left];
-                }
             } else {
+                sum += Math.max(0, rightMax - heights[right]);
+                rightMax = Math.max(rightMax, heights[right]);
                 right--;
-                if (rightHeight > heights[right]) {
-                    sum += rightHeight - heights[right];
-                } else {
-                    rightHeight = heights[right];
-                }
             }
         }
+        
         return sum;
     }
 }
