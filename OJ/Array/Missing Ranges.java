@@ -6,3 +6,24 @@
 // Hide Tags Array
 // Hide Similar Problems (M) Summary Ranges
 
+public class Solution {
+    public List<String> findMissingRanges(int[] nums, int lower, int upper) {
+        List<String> result = new ArrayList<String>();
+        
+        int prev = lower - 1;
+        for (int i = 0; i <= nums.length; i++) {
+            int next = i == nums.length ? upper + 1 : nums[i];
+            
+            // add range
+            if (prev + 2 == next) {
+                result.add("" + (prev + 1));
+            } else if (prev + 2 < next) {
+                result.add("" + (prev + 1) + "->" + (next - 1));
+            }
+            
+            prev = next;
+        }
+        
+        return result;
+    }
+}
