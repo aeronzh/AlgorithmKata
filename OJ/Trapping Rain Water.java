@@ -24,24 +24,24 @@ public class Solution {
         if (heights == null || heights.length == 0) {
             return 0;
         }
-        
+
         int[] leftMax = new int[heights.length];
         leftMax[0] = heights[0];
         for (int i = 1; i < heights.length; i++) {
             leftMax[i] = Math.max(leftMax[i - 1], heights[i]);
         }
-        
+
         int[] rightMax = new int[heights.length];
         rightMax[heights.length - 1] = heights[heights.length - 1];
         for (int i = heights.length - 2; i >= 0; i--) {
             rightMax[i] = Math.max(rightMax[i + 1], heights[i]);
         }
-        
+
         int sum = 0;
         for (int i = 1; i < heights.length - 1; i++) {
             sum += Math.max(0, Math.min(leftMax[i - 1], rightMax[i + 1]) - heights[i]);
         }
-        
+
         return sum;
     }
 }
@@ -100,26 +100,25 @@ public class Solution {
         if (heights == null || heights.length == 0) {
             return 0;
         }
-        
-        int left = 1;
-        int right = heights.length - 2;
+
+        int left = 0;
+        int right = heights.length - 1;
         int leftMax = heights[0];
         int rightMax = heights[heights.length - 1];
-        
         int sum = 0;
-        
-        while (left <= right) {
+
+        while (left < right) {
             if (leftMax < rightMax) {
-                sum += Math.max(0, leftMax - heights[left]);
-                leftMax = Math.max(leftMax, heights[left]);
                 left++;
+                leftMax = Math.max(leftMax, heights[left]);
+                sum += leftMax - heights[left];
             } else {
-                sum += Math.max(0, rightMax - heights[right]);
-                rightMax = Math.max(rightMax, heights[right]);
                 right--;
+                rightMax = Math.max(rightMax, heights[right]);
+                sum += rightMax - heights[right];
             }
         }
-        
+
         return sum;
     }
 }
