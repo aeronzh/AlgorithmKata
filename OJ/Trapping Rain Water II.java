@@ -31,55 +31,54 @@ public class Solution {
      */
     public int trapRainWater(int[][] heights) {
         // write your code here
-        if (heights == null || heights.length == 0) return 0;
+        if (heights == null || heights.length == 0 || heights[0].length == 0) {
+            return 0;
+        }
 
         // PriorityQueue(int initialCapacity, Comparator<? super E> comparator)
         PriorityQueue<Cell> heap = new PriorityQueue<Cell>(1, new Comparator<Cell>() {
             @Override
             public int compare(Cell x, Cell y) {
-                if (x.h > y.h) {
-                    return 1;
-                } else if (x.h < y.h) {
-                    return -1;
-                }
-                return 0;
+                return x.h - y.h;
             }
         });
 
         int m = heights.length;
         int n = heights[0].length;
-        int[][] visited = new int[m][n];
+        boolean[][] visited = new boolean[m][n];
 
         // Initialising the visited matrix
         // Adding the outer-most cells to the heap
         for (int i = 0; i < m; i++) {
             heap.add(new Cell(i, 0, heights[i][0]));
             heap.add(new Cell(i, n - 1, heights[i][n - 1]));
-            visited[i][0] = 1;
-            visited[i][n - 1] = 1;
+            visited[i][0] = true;
+            visited[i][n - 1] = true;
         }
 
         for (int i = 0; i < n; i++) {
             heap.add(new Cell(0, i, heights[0][i]));
             heap.add(new Cell(m - 1, i, heights[m - 1][i]));
-            visited[0][i] = 1;
-            visited[m - 1][i] = 1;
+            visited[0][i] = true;;
+            visited[m - 1][i] = true;
         }
 
         int sum = 0;
-        while(!heap.isEmpty()) {
+        while (!heap.isEmpty()) {
             Cell cur = heap.poll();
 
-            for(int i = 0; i < 4; i++) {
+            for (int i = 0; i < 4; i++) {
                 int x = cur.x + dx[i];
                 int y = cur.y + dy[i];
-                if (x >= 0 && x < m && y >= 0 && y < n && visited[x][y] != 1) {
-                    visited[x][y] = 1;
-                    heap.add(new Cell(x, y, Math.max(cur.h, heights[x][y])));
+
+                if (x >= 0 && x < m && y >= 0 && y < n && !visited[x][y]) {
                     sum += Math.max(0, cur.h - heights[x][y]);
+                    heap.offer(new Cell(x, y, Math.max(cur.h, heights[x][y])));
+                    visited[x][y] = true;
                 }
             }
         }
+
         return sum;
     }
 }
