@@ -303,3 +303,61 @@ public class Solution {
         return result;
     }
 }
+
+// max heap 
+public class Solution {
+    /**
+     * @param nums: A list of integers.
+     * @return: The median of the element inside the window at each moving.
+     */
+    public ArrayList<Integer> medianSlidingWindow(int[] nums, int k) {
+        // write your code here
+        ArrayList<Integer> result = new ArrayList<Integer>();
+        
+        if (nums == null || nums.length < k || k == 0) {
+            return result;
+        }
+        
+        PriorityQueue<Integer> minHeap = new PriorityQueue<Integer>();
+        PriorityQueue<Integer> maxHeap = new PriorityQueue<Integer>(k, Collections.reverseOrder());
+        
+        for (int i = 0; i < nums.length; i++) {
+            maxHeap.offer(nums[i]);
+            
+            if (maxHeap.size() - minHeap.size() > 1) {
+                minHeap.offer(maxHeap.poll());
+            }
+            
+            if (minHeap.size() > 0 && maxHeap.peek() > minHeap.peek()) {
+                int min = minHeap.poll();
+                int max = maxHeap.poll();
+                minHeap.offer(max);
+                maxHeap.offer(min);
+            }
+            
+            if (i + 1 < k) {
+                continue;
+            }
+            
+            if (i + 1 > k) {
+                if (maxHeap.peek() < nums[i - k]) {
+                    minHeap.remove(nums[i - k]);
+                } else {
+                    maxHeap.remove(nums[i - k]);
+                }
+            }
+            
+            if (maxHeap.size() - minHeap.size() > 1) {
+                minHeap.offer(maxHeap.poll());
+            }
+            
+            if (maxHeap.size() < minHeap.size()) {
+                maxHeap.offer(minHeap.poll());
+            }
+            
+            result.add(maxHeap.peek());
+        }
+        
+        return result;
+    }
+}
