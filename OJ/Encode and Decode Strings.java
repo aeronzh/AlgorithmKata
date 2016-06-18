@@ -47,25 +47,24 @@ public class Codec {
 
     // Decodes a single string to a list of strings.
     public List<String> decode(String s) {
-        List<String> list = new ArrayList<String>();
+        List<String> result = new ArrayList<String>();
+        
+        if (s == "") {
+            return result;
+        }
         
         int i = 0;
         while (i < s.length()) {
             int j = i;
-            while (j < s.length() && s.charAt(j) != '#') {
+            while (s.charAt(j) != '#') {
                 j++;
             }
-            
-            int len = 0;
-            if (j < s.length()) {
-                len = Integer.parseInt(s.substring(i, j));
-                list.add(s.substring(j + 1, j + len + 1));
-            }
-            
+            int len = Integer.parseInt(s.substring(i, j));
+            result.add(s.substring(j + 1, j + len + 1));
             i = j + len + 1;
         }
         
-        return list;
+        return result;
     }
 }
 
