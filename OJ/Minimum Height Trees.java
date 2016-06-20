@@ -67,6 +67,7 @@ public class Solution {
         Queue<Integer> queue = new LinkedList<Integer>(); // leaves
         
         for (int i = 0; i < n; i++) {
+            // <= for case when there is only one node
             if (graph.get(i).size() <= 1) {
                 queue.offer(i);
             }

@@ -92,3 +92,66 @@ class Node {
         indegree = 0;
     }
 }
+
+// v2
+public class Solution {
+    public String alienOrder(String[] words) {
+        if (words == null || words.length == 0) {
+            return "";
+        }
+        
+        HashMap<Character, HashSet<Character>> graph = new HashMap<Character, HashSet<Character>>();
+        HashMap<Character, Integer> indegree = new HashMap<Character, Integer>();
+        for (String word : words) {
+            for (char c : word.toCharArray()) {
+                if (!graph.containsKey(c)) {
+                    graph.put(c, new HashSet<Character>());
+                    indegree.put(c, 0);
+                }
+            }
+        }
+        
+        for (int i = 0; i < words.length - 1; i++) {
+            int index = 0;
+            int len = Math.min(words[i].length(), words[i + 1].length());
+            while (index < len) {
+                if (words[i].charAt(index) != words[i + 1].charAt(index)) {
+                    break;
+                }
+                index++;
+            }
+            
+            if (index != len) {
+                char u = words[i].charAt(index);
+                char v = words[i + 1].charAt(index);
+                if (!graph.get(u).contains(v)) {
+                    graph.get(u).add(v);
+                    indegree.put(v, indegree.get(v) + 1);
+                }
+            }
+        }
+        
+        Queue<Character> queue = new LinkedList<Character>();
+        for (Character c : indegree.keySet()) {
+            if (indegree.get(c) == 0) {
+                queue.offer(c);
+            }
+        }
+        
+        StringBuilder sb = new StringBuilder();
+        
+        while (!queue.isEmpty()) {
+            char c = queue.poll();
+            sb.append(c);
+            
+            for (char nb : graph.get(c)) {
+                indegree.put(nb, indegree.get(nb) - 1);
+                if (indegree.get(nb) == 0) {
+                    queue.offer(nb);
+                }
+            }
+        }
+        
+        return sb.length() == graph.size() ? sb.toString() : "";
+    }
+}
