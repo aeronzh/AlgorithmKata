@@ -33,8 +33,7 @@ public class Solution extends Reader4 {
             }
 
             for (int i = 0; i < count && total < n; i++) {
-                buf[total] = temp[i];
-                total++;
+                buf[total++] = temp[i];
             }
         }
 

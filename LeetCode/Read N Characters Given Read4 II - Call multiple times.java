@@ -46,11 +46,10 @@ public class Solution extends Reader4 {
             }
 
             while (tempPtr < count && len < n) {
-                buf[len] = temp[tempPtr];
-                len++;
-                tempPtr++;
+                buf[len++] = temp[tempPtr++];
             }
 
+            // if all chars are consumed, reset
             if (tempPtr >= count) {
                 tempPtr = 0;
             }

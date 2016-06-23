@@ -18,10 +18,10 @@ public class Solution {
      */
     public boolean isUgly(int num) {
         // Write your code here
-        if (num != 1 && num < 3) {
+        if (num != 1 && num < 2) {
             return false;
-        } 
-        
+        }
+
         while (num != 1) {
             if (num % 2 == 0) {
                 num /= 2;
@@ -33,7 +33,7 @@ public class Solution {
                 return false;
             }
         }
-        
+
         return true;
     }
 }
