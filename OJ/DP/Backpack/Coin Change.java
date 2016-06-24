@@ -20,25 +20,25 @@
 // Coin change problem is to find the fewest number of coins that make up a given amount.
 // Each coin given can be used multiple times, unlike in Backpack, each item can only be used once
 
+// similar to backpack III
 public class Solution {
     public int coinChange(int[] coins, int amount) {
-        if (coins == null || coins.length == 0 || amount == 0) {
+        if (coins == null || coins.length == 0) {
             return 0;
         }
-        
-        // dp[i]: fewest coins needed to make up amount j
+
         int[] dp = new int[amount + 1];
         Arrays.fill(dp, Integer.MAX_VALUE);
         dp[0] = 0;
-        
-        for (int i = 0; i < amount + 1; i++) {
-            for (int coin : coins) {
+
+        for (int coin : coins) {
+            for (int i = 0; i < amount + 1; i++) {
                 if (i >= coin && dp[i - coin] != Integer.MAX_VALUE) {
                     dp[i] = Math.min(dp[i], dp[i - coin] + 1);
                 }
             }
         }
-        
+
         return dp[amount] == Integer.MAX_VALUE ? -1 : dp[amount];
     }
 }
@@ -48,37 +48,37 @@ public class Solution {
         if (coins == null || coins.length == 0) {
             return -1;
         }
-        
+
         HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
-        
+
         return dfs(coins, amount, map);
     }
-    
+
     private int dfs(int[] coins, int amount, HashMap<Integer, Integer> map) {
         if (map.containsKey(amount)) {
             return map.get(amount);
         }
-        
+
         if (amount == 0) {
             return 0;
         }
-        
+
         if (amount < 0) {
             return -1;
         }
-        
+
         int min = Integer.MAX_VALUE;
         for (int i = 0; i < coins.length; i++) {
             int count = dfs(coins, amount - coins[i], map);
-            
+
             if (count >= 0) {
                 min = Math.min(min, count + 1);
             }
         }
-        
+
         min = min == Integer.MAX_VALUE ? -1 : min;
         map.put(amount, min);
-        
+
         return min;
     }
 }
