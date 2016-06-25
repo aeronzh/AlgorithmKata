@@ -20,7 +20,58 @@
 // Hide Similar Problems (M) Surrounded Regions (M) Number of Islands (H) Shortest Distance from All Buildings
 
 // BFS
+public class Solution {
+    public void wallsAndGates(int[][] rooms) {
+        if (rooms == null || rooms.length == 0 || rooms[0].length == 0) {
+            return;
+        }
 
+        for (int i = 0; i < rooms.length; i++) {
+            for (int j = 0; j < rooms[0].length; j++) {
+                if (rooms[i][j] == 0) {
+                    bfs(rooms, i, j);
+                }
+            }
+        }
+    }
+
+    int[] dx = {0, 0, 1, -1};
+    int[] dy = {1, -1, 0, 0};
+
+    private void bfs(int[][] rooms, int x, int y) {
+        int m = rooms.length;
+        int n = rooms[0].length;
+
+        Queue<Integer> queue = new LinkedList<Integer>();
+        queue.offer(convert(x, y, n));
+        int distance = 0;
+
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            distance++;
+
+            for (int i = 0; i < size; i++) {
+                int pos = queue.poll();
+                x = pos / n;
+                y = pos % n;
+                for (int j = 0; j < 4; j++) {
+                    int newX = x + dx[j];
+                    int newY = y + dy[j];
+                    if (newX >= 0 && newX < m && newY >= 0 && newY < n &&
+                        rooms[newX][newY] > 0 && distance < rooms[newX][newY]) {
+                        rooms[newX][newY] = distance;
+                        queue.offer(convert(newX, newY, n));
+                    }
+                }
+
+            }
+        }
+    }
+
+    private int convert(int row, int col, int n) {
+        return row * n + col;
+    }
+}
 
 // DFS
 public class Solution {

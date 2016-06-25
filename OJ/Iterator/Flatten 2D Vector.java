@@ -100,20 +100,19 @@ public class Vector2D implements Iterator<Integer> {
     List<List<Integer>> vec;
 
     public Vector2D(List<List<Integer>> vec2d) {
-        vec = vec2d;
         x = 0;
-        y = -1;
+        y = 0;
+        vec = vec2d;
     }
 
     @Override
     public Integer next() {
-        return vec.get(x).get(y);
+        return vec.get(x).get(y++);
     }
 
     @Override
     public boolean hasNext() {
-        y++;
-        while (x < vec.size() && (vec.get(x).size() == 0 || y == vec.get(x).size())) {
+        while (x < vec.size() && (vec.get(x) == null || y == vec.get(x).size())) {
             x++;
             y = 0;
         }
@@ -121,7 +120,8 @@ public class Vector2D implements Iterator<Integer> {
         if (x == vec.size()) {
             return false;
         }
-        return y < vec.get(x).size();
+
+        return true;
     }
 }
 
