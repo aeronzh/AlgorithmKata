@@ -1,80 +1,157 @@
+// Serialization is the process of converting a data structure or object into a sequence of bits so that it can be stored in a file or memory buffer, or transmitted across a network connection link to be reconstructed later in the same or another computer environment.
+//
+// Design an algorithm to serialize and deserialize a binary tree. There is no restriction on how your serialization/deserialization algorithm should work. You just need to ensure that a binary tree can be serialized to a string and this string can be deserialized to the original tree structure.
+//
+// For example, you may serialize the following tree
+//
+//     1
+//    / \
+//   2   3
+//      / \
+//     4   5
+// as "[1,2,3,null,null,4,5]", just the same as how LeetCode OJ serializes a binary tree. You do not necessarily need to follow this format, so please be creative and come up with different approaches yourself.
+// Note: Do not use class member/global/static variables to store states. Your serialize and deserialize algorithms should be stateless.
+//
+// Credits:
+// Special thanks to @Louis1992 for adding this problem and creating all test cases.
+//
+// Hide Company Tags LinkedIn Google Uber Facebook Amazon Microsoft Yahoo Bloomberg
+// Hide Tags Tree Design
+// Hide Similar Problems (M) Encode and Decode Strings
+
+// BFS
 /**
- * Definition of TreeNode:
+ * Definition for a binary tree node.
  * public class TreeNode {
- *     public int val;
- *     public TreeNode left, right;
- *     public TreeNode(int val) {
- *         this.val = val;
- *         this.left = this.right = null;
- *     }
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
  * }
  */
-class Solution {
-    /**
-     * This method will be invoked first, you should design your own algorithm
-     * to serialize a binary tree which denote by a root node to a string which
-     * can be easily deserialized by your own "deserialize" method later.
-     */
+public class Codec {
+
+    // Encodes a tree to a single string.
     public String serialize(TreeNode root) {
-        // write your code here
         if (root == null) {
             return "";
         }
 
-        StringBuilder sb = new StringBuilder();
         Queue<TreeNode> queue = new LinkedList<TreeNode>();
         queue.offer(root);
+        StringBuilder sb = new StringBuilder();
 
         while (!queue.isEmpty()) {
             TreeNode cur = queue.poll();
             if (cur == null) {
-                sb.append("#,");
-                continue;
+                sb.append("#");
+            } else {
+                sb.append(cur.val);
+                queue.offer(cur.left);
+                queue.offer(cur.right);
             }
-            sb.append(cur.val);
-            sb.append(",");
-            queue.offer(cur.left);
-            queue.offer(cur.right);
+            if (!queue.isEmpty()) {
+                sb.append(",");
+            }
         }
 
-        return sb.toString().substring(0, sb.length() - 1);
+        return sb.toString();
     }
 
-    /**
-     * This method will be invoked second, the argument data is what exactly
-     * you serialized at method "serialize", that means the data is not given by
-     * system, it's given by your own serialize method. So the format of data is
-     * designed by yourself, and deserialize it here as you serialize it in
-     * "serialize" method.
-     */
+    // Decodes your encoded data to tree.
     public TreeNode deserialize(String data) {
-        // write your code here
-        if (data == "") {
+        if (data.length() == 0) {
             return null;
         }
 
-        String[] array = data.split(",");
-        ArrayList<TreeNode> queue = new ArrayList<TreeNode>();
-        queue.add(new TreeNode(Integer.parseInt(array[0])));
-        int aIdx = 1;
+        String[] strs = data.split(",");
+        int strIdx = 1;
+        List<TreeNode> queue = new ArrayList<TreeNode>();
+        queue.add(new TreeNode(Integer.parseInt(strs[0])));
 
         for (int i = 0; i < queue.size(); i++) {
             TreeNode cur = queue.get(i);
-
-            if (!array[aIdx].equals("#")) {
-                TreeNode left = new TreeNode(Integer.parseInt(array[aIdx]));
-                cur.left = left;
-                queue.add(left);
+            if (!strs[strIdx].equals("#")) {
+                cur.left = new TreeNode(Integer.parseInt(strs[strIdx]));
+                queue.add(cur.left);
             }
-            aIdx++;
-            if (!array[aIdx].equals("#")) {
-                TreeNode right = new TreeNode(Integer.parseInt(array[aIdx]));
-                cur.right = right;
-                queue.add(right);
+            strIdx++;
+            if (!strs[strIdx].equals("#")) {
+                cur.right = new TreeNode(Integer.parseInt(strs[strIdx]));
+                queue.add(cur.right);
             }
-            aIdx++;
+            strIdx++;
         }
 
         return queue.get(0);
     }
 }
+
+// Your Codec object will be instantiated and called as such:
+// Codec codec = new Codec();
+// codec.deserialize(codec.serialize(root));
+
+
+// DFS
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Codec {
+
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        if (root == null) {
+            return "";
+        }
+
+        StringBuilder sb = new StringBuilder();
+        buildString(sb, root);
+        return sb.toString();
+    }
+
+    private void buildString(StringBuilder sb, TreeNode root) {
+        if (root == null) {
+            sb.append("#,");
+            return;
+        }
+
+        sb.append(root.val + ",");
+        buildString(sb, root.left);
+        buildString(sb, root.right);
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        if (data.length() == 0) {
+            return null;
+        }
+
+        Queue<String> queue = new LinkedList<String>();
+        queue.addAll(Arrays.asList(data.split(",")));
+        return buildTree(queue);
+    }
+
+    private TreeNode buildTree(Queue<String> queue) {
+        String cur = queue.poll();
+
+        if (cur.equals("#")) {
+            return null;
+        }
+
+        TreeNode node = new TreeNode(Integer.parseInt(cur));
+        node.left = buildTree(queue);
+        node.right = buildTree(queue);
+
+        return node;
+    }
+}
+
+// Your Codec object will be instantiated and called as such:
+// Codec codec = new Codec();
+// codec.deserialize(codec.serialize(root));

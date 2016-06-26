@@ -22,20 +22,20 @@
 public class Solution {
     public int shortestDistance(int[][] grid) {
         if (grid == null || grid.length == 0 || grid[0].length == 0) {
-            return -1;
+            return 0;
         }
 
         int m = grid.length;
         int n = grid[0].length;
 
-        int[][] distance = new int[m][n];
+        int[][] distances = new int[m][n];
         int[][] reach = new int[m][n];
         int numOfBuildings = 0;
 
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 if (grid[i][j] == 1) {
-                    bfs(grid, distance, reach, i, j, new boolean[m][n]);
+                    bfs(grid, distances, reach, i, j);
                     numOfBuildings++;
                 }
             }
@@ -45,7 +45,7 @@ public class Solution {
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 if (reach[i][j] == numOfBuildings) {
-                    shortest = Math.min(shortest, distance[i][j]);
+                    shortest = Math.min(shortest, distances[i][j]);
                 }
             }
         }
@@ -56,36 +56,33 @@ public class Solution {
     int[] dx = {0, 0, 1, -1};
     int[] dy = {1, -1, 0, 0};
 
-    private void bfs(int[][] grid, int[][] distance, int[][] reach, int x, int y, boolean[][] visited) {
+    private void bfs(int[][] grid, int[][] distances, int[][] reach, int x, int y) {
         int m = grid.length;
         int n = grid[0].length;
 
         Queue<Integer> queue = new LinkedList<Integer>();
         queue.offer(convert(x, y, n));
+        boolean[][] visited = new boolean[m][n];
         visited[x][y] = true;
+        int distance = 0;
 
-        int pathLen = 0;
         while (!queue.isEmpty()) {
             int size = queue.size();
-            pathLen++;
+            distance++;
 
-            for (int k = 0; k < size; k++) {
-                int location = queue.poll();
-                int row = location / n;
-                int col = location % n;
-
-                for (int i = 0; i < 4; i++) {
-                    int newX = row + dx[i];
-                    int newY = col + dy[i];
-
-                    if (newX < 0 || newX >= m || newY < 0 || newY >= n || grid[newX][newY] != 0 || visited[newX][newY]) {
-                        continue;
+            for (int i = 0; i < size; i++) {
+                int pos = queue.poll();
+                x = pos / n;
+                y = pos % n;
+                for (int j = 0; j < 4; j++) {
+                    int newX = x + dx[j];
+                    int newY = y + dy[j];
+                    if (newX >= 0 && newX < m && newY >= 0 && newY < n && grid[newX][newY] != 1 && grid[newX][newY] != 2 && !visited[newX][newY]) {
+                        distances[newX][newY] += distance;
+                        reach[newX][newY]++;
+                        visited[newX][newY] = true;
+                        queue.offer(convert(newX, newY, n));
                     }
-
-                    distance[newX][newY] += pathLen;
-                    reach[newX][newY]++;
-                    queue.offer(convert(newX, newY, n));
-                    visited[newX][newY] = true;
                 }
             }
         }
