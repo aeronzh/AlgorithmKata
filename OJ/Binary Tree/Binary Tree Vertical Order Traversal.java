@@ -67,57 +67,54 @@
  *     TreeNode(int x) { val = x; }
  * }
  */
-public class Solution {
-    public List<List<Integer>> verticalOrder(TreeNode root) {
-        List<List<Integer>> result = new ArrayList<>();
-        
-        if (root == null) {
-            return result;
-        }
-        
-        TreeMap<Integer, List<Integer>> map = new TreeMap<>();
-        map.put(0, new ArrayList<Integer>());
-        map.get(0).add(root.val);
-        Pair rootPair = new Pair(root, 0);
-        Queue<Pair> queue = new LinkedList<Pair>();
-        queue.offer(rootPair);
-        
-        while (!queue.isEmpty()) {
-            int size = queue.size();
-            
-            for (int i = 0; i < size; i++) {
-                Pair cur = queue.poll();
-                if (cur.node.left != null) {
-                    process(cur.node.left, map, queue, cur.pos - 1);
-                }
-                if (cur.node.right != null) {
-                    process(cur.node.right, map, queue, cur.pos + 1);
-                }
-            }
-        }
-        
-        for (List<Integer> list : map.values()) {
-            result.add(list);
-        }
-        
-        return result;
-    }
-    
-    private void process(TreeNode node, TreeMap<Integer, List<Integer>> map, Queue<Pair> queue, int pos) {
-        Pair child = new Pair(node, pos);
-        queue.offer(child);
-        if (!map.containsKey(pos)) {
-            map.put(pos, new ArrayList<Integer>());
-        }
-        map.get(pos).add(node.val);
-    }
-}
 
-class Pair {
-    TreeNode node;
-    int pos;
-    Pair(TreeNode node, int pos) {
-        this.node = node;
-        this.pos = pos;
-    }
-}
+ /**
+  * Definition for a binary tree node.
+  * public class TreeNode {
+  *     int val;
+  *     TreeNode left;
+  *     TreeNode right;
+  *     TreeNode(int x) { val = x; }
+  * }
+  */
+ public class Solution {
+     public List<List<Integer>> verticalOrder(TreeNode root) {
+         List<List<Integer>> result = new ArrayList<>();
+         if (root == null) {
+             return result;
+         }
+
+         TreeMap<Integer, List<Integer>> map = new TreeMap<Integer, List<Integer>>();
+         Queue<Pair> queue = new LinkedList<Pair>();
+         queue.offer(new Pair(root, 0));
+
+         while (!queue.isEmpty()) {
+             Pair cur = queue.poll();
+             if (!map.containsKey(cur.pos)) {
+                 map.put(cur.pos, new ArrayList<Integer>());
+             }
+             map.get(cur.pos).add(cur.node.val);
+             if (cur.node.left != null) {
+                 queue.offer(new Pair(cur.node.left, cur.pos - 1));
+             }
+             if (cur.node.right != null) {
+                 queue.offer(new Pair(cur.node.right, cur.pos + 1));
+             }
+         }
+
+         for (List<Integer> list : map.values()) {
+             result.add(list);
+         }
+
+         return result;
+     }
+ }
+
+ class Pair {
+     TreeNode node;
+     int pos;
+     public Pair(TreeNode node, int pos) {
+         this.node = node;
+         this.pos = pos;
+     }
+ }
