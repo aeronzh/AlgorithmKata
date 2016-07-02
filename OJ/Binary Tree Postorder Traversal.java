@@ -9,6 +9,44 @@
  *     }
  * }
  */
+
+// Two stacks: O(n) time & space
+// Just like the reversion of preorder traversal
+public class Solution {
+    /**
+     * @param root: The root of binary tree.
+     * @return: Postorder in ArrayList which contains node values.
+     */
+    public ArrayList<Integer> postorderTraversal(TreeNode root) {
+        // write your code here
+        ArrayList<Integer> result = new ArrayList<Integer>();
+        if (root == null) {
+            return result;
+        }
+
+        Stack<TreeNode> s1 = new Stack<TreeNode>();
+        Stack<TreeNode> s2 = new Stack<TreeNode>();
+        s1.push(root);
+
+        while (!s1.isEmpty()) {
+            root = s1.pop();
+            s2.push(root);
+            if (root.left != null) {
+                s1.push(root.left);
+            }
+            if (root.right != null) {
+                s1.push(root.right);
+            }
+        }
+
+        while (!s2.isEmpty()) {
+            result.add(s2.pop().val);
+        }
+
+        return result;
+    }
+}
+
 public class Solution {
     /**
      * @param root: The root of binary tree.

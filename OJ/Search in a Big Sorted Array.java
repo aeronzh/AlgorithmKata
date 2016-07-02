@@ -13,38 +13,45 @@
 // Note the pre-processing of end pointer
 // A similar idea taken from ArrayList
 // -----------------------------------------------------------------------------
+/**
+ * Definition of ArrayReader:
+ *
+ * class ArrayReader {
+ *      // get the number at index, return -1 if not exists.
+ *      public int get(int index);
+ * }
+ */
 public class Solution {
     /**
-     * @param A: An integer array
+     * @param reader: An instance of ArrayReader.
      * @param target: An integer
      * @return : An integer which is the index of the target number
      */
-    public int searchBigSortedArray(int[] A, int target) {
+    public int searchBigSortedArray(ArrayReader reader, int target) {
         // write your code here
-        if (A == null || A.length == 0) return -1;
+        int end = 1;
+        while (reader.get(end - 1) < target && reader.get(end - 1) != -1) {
+            end = end * 2;
+        }
 
-        // end is Initialised to 0 in case of there is only a single element in A[]
-        int start = 0, mid = 0, end = 0;
-        while (end < A.length && A[end] < target) {
-            end = end * 2 + 1; // plus 1 since end is initialised to be 0
-            if (end >= A.length - 1) {
-                end = A.length - 1;
-                break;
-            }
-        }
+        int start = 0;
         while (start + 1 < end) {
-            mid = start + (end - start) / 2;
-            if (A[mid] >= target) {
+            int mid = start + (end - start) / 2;
+            if (reader.get(mid) == target) {
                 end = mid;
-            } else {
+            } else if (reader.get(mid) < target && reader.get(mid) != -1) {
                 start = mid;
+            } else {
+                end = mid;
             }
         }
-        if (A[start] == target) {
+
+        if (reader.get(start) == target) {
             return start;
-        } else if (A[end] == target) {
+        } else if (reader.get(end) == target) {
             return end;
         }
+
         return -1;
     }
 }
