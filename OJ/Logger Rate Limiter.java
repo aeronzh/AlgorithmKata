@@ -62,3 +62,28 @@ public class Logger {
  * Logger obj = new Logger();
  * boolean param_1 = obj.shouldPrintMessage(timestamp,message);
  */
+
+// v2
+public class Logger {
+    HashMap<String, Integer> updatedTime;
+    
+    /** Initialize your data structure here. */
+    public Logger() {
+        updatedTime = new HashMap<>();
+    }
+    
+    /** Returns true if the message should be printed in the given timestamp, otherwise returns false.
+        If this method returns false, the message will not be printed.
+        The timestamp is in seconds granularity. */
+    public boolean shouldPrintMessage(int timestamp, String message) {
+        if (!updatedTime.containsKey(message)) {
+            updatedTime.put(message, timestamp);
+            return true;
+        } else if (timestamp - updatedTime.get(message) >= 10) {
+            updatedTime.put(message, timestamp);
+            return true;
+        }
+        
+        return false;
+    }
+}
