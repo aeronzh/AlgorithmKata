@@ -48,3 +48,19 @@ public class Solution {
         return max;
     }
 }
+
+// TLE
+public class Solution {
+    public boolean wordBreak(String s, Set<String> wordDict) {
+        if (s.length() == 0) {
+            return true;
+        }
+        
+        for (int i = 1; i <= s.length(); i++) {
+            if (wordDict.contains(s.substring(0, i)) && wordBreak(s.substring(i), wordDict)) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
