@@ -20,75 +20,72 @@
 // Hide Similar Problems (M) Walls and Gates (H) Best Meeting Point
 
 public class Solution {
+    int m;
+    int n;
+    int[] dx = {0, 0, 1, -1};
+    int[] dy = {1, -1, 0, 0};
+        
     public int shortestDistance(int[][] grid) {
-        if (grid == null || grid.length == 0 || grid[0].length == 0) {
-            return 0;
-        }
-
-        int m = grid.length;
-        int n = grid[0].length;
-
+        m = grid.length;
+        n = grid[0].length;
+        
         int[][] distances = new int[m][n];
         int[][] reach = new int[m][n];
         int numOfBuildings = 0;
-
+        
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 if (grid[i][j] == 1) {
-                    bfs(grid, distances, reach, i, j);
+                    bfs(grid, i, j, distances, reach);
                     numOfBuildings++;
                 }
             }
         }
-
-        int shortest = Integer.MAX_VALUE;
+        
+        int min = Integer.MAX_VALUE;
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 if (reach[i][j] == numOfBuildings) {
-                    shortest = Math.min(shortest, distances[i][j]);
+                    min = Math.min(min, distances[i][j]);
                 }
             }
         }
-
-        return shortest == Integer.MAX_VALUE ? -1 : shortest;
+        
+        return min == Integer.MAX_VALUE ? -1 : min;
     }
-
-    int[] dx = {0, 0, 1, -1};
-    int[] dy = {1, -1, 0, 0};
-
-    private void bfs(int[][] grid, int[][] distances, int[][] reach, int x, int y) {
-        int m = grid.length;
-        int n = grid[0].length;
-
-        Queue<Integer> queue = new LinkedList<Integer>();
-        queue.offer(convert(x, y, n));
-        boolean[][] visited = new boolean[m][n];
-        visited[x][y] = true;
+    
+    private void bfs(int[][] grid, int x, int y, int[][] distances, int[][] reach) {
+        Queue<Integer> queue = new LinkedList<>();
+        queue.offer(convert(x, y));
+        HashSet<Integer> set = new HashSet<>();
+        set.add(convert(x, y));
         int distance = 0;
-
+        
         while (!queue.isEmpty()) {
             int size = queue.size();
             distance++;
-
+            
             for (int i = 0; i < size; i++) {
                 int pos = queue.poll();
                 x = pos / n;
                 y = pos % n;
+                
                 for (int j = 0; j < 4; j++) {
                     int newX = x + dx[j];
                     int newY = y + dy[j];
-                    if (newX >= 0 && newX < m && newY >= 0 && newY < n && grid[newX][newY] != 1 && grid[newX][newY] != 2 && !visited[newX][newY]) {
+                    int newPos = convert(newX, newY);
+                    
+                    if (newX >= 0 && newX < m && newY >= 0 && newY < n && grid[newX][newY] == 0 && set.add(newPos)) {
+                        queue.offer(newPos);
                         distances[newX][newY] += distance;
                         reach[newX][newY]++;
-                        visited[newX][newY] = true;
-                        queue.offer(convert(newX, newY, n));
                     }
                 }
             }
         }
     }
-
-    private int convert(int row, int col, int n) {
+    
+    private int convert(int row, int col) {
         return row * n + col;
     }
 }

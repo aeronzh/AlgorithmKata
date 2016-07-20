@@ -8,6 +8,7 @@
 //
 // return 4 and front four elements of the array is [0,0,0,2]
 
+// note left <= right. Try test cases such as [3,2,2,3]
 public class Solution {
     /**
      *@param A: A list of integers
@@ -68,5 +69,28 @@ public class Solution {
         }
 
         return left;
+    }
+}
+
+// v3
+public class Solution {
+    public int removeElement(int[] nums, int val) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        
+        int i = 0;
+        int j = 0;
+        while (j < nums.length) {
+            while (j < nums.length && nums[j] == val) {
+                j++;
+            }
+            
+            if (j < nums.length) {
+                nums[i++] = nums[j++];
+            }
+        }
+        
+        return i;
     }
 }

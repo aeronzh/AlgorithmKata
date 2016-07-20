@@ -35,3 +35,38 @@ public class Solution {
         return stack.isEmpty();
     }
 }
+
+// v2
+public class Solution {
+    /**
+     * @param s A string
+     * @return whether the string is a valid parentheses
+     */
+    public boolean isValidParentheses(String s) {
+        // Write your code here
+        if (s == null || s.length() == 0) {
+            return true;
+        }
+        
+        Stack<Character> stack = new Stack<>();
+        for (char c : s.toCharArray()) {
+            if (c == '(' || c == '{' || c == '[') {
+                stack.push(c);
+            } else {
+                if (stack.isEmpty()) {
+                    return false;
+                } else if (c == ')' && stack.peek() != '(') {
+                    return false;
+                } else if (c == '}' && stack.peek() != '{') {
+                    return false;
+                } else if (c == ']' && stack.peek() != '[') {
+                    return false;
+                } else {
+                    stack.pop();
+                }
+            }
+        }
+        
+        return stack.isEmpty();
+    }
+}
