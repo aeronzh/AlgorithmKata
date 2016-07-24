@@ -29,3 +29,23 @@ public class Solution {
         return sb.reverse().toString();
     }
 }
+
+// v2
+public class Solution {
+    public String addBinary(String a, String b) {
+        int ai = a.length() - 1;
+        int bi = b.length() - 1;
+        int carry = 0;
+        StringBuilder result = new StringBuilder();
+        
+        while (ai >= 0 || bi >= 0 || carry != 0) {
+            int aBit = ai >= 0 ? a.charAt(ai--) - '0' : 0;
+            int bBit = bi >= 0 ? b.charAt(bi--) - '0' : 0;
+            int sum = aBit ^ bBit ^ carry;
+            carry = aBit + bBit + carry > 1 ? 1 : 0;
+            result.append(sum);
+        }
+        
+        return result.reverse().toString();
+    }
+}
