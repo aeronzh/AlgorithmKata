@@ -23,7 +23,7 @@ public class Solution {
             return 0;
         }
         
-        // dp[i][j]: max value composed by first i items with a backpack of size j
+        // dp[i][j]: max value by placing first i items into a bag of size j
         int[][] dp = new int[A.length + 1][m + 1];
         
         for (int i = 1; i < A.length + 1; i++) {
