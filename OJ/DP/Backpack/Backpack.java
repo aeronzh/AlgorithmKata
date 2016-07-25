@@ -23,7 +23,8 @@ public class Solution {
      */
     public int backPack(int m, int[] A) {
         // write your code here
-        // dp[i][j]: can first n items fill a backpack with size j
+        // dp[i][j]: can first i items fill a backpack of size j
+
         if (A == null || A.length == 0) {
             return 0;
         }
