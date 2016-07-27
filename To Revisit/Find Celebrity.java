@@ -36,3 +36,27 @@ public class Solution extends Relation {
         return celebrity;
     }
 }
+
+// brute force
+public class Solution extends Relation {
+    public int findCelebrity(int n) {
+        int celebrity = -1;
+        int j = 0;
+        for (int i = 0; i < n; i++) {
+            for (j = 0; j < n; j++) {
+                if (i == j) {
+                    continue;
+                }
+                if (knows(i, j) || !knows(j, i)) {
+                    break;
+                }
+            }
+            if (j == n) {
+                celebrity = i;
+                break;
+            }
+        }
+        
+        return celebrity;
+    }
+}

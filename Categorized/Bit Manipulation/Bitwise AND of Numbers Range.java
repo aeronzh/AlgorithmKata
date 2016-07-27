@@ -14,6 +14,7 @@ public class Solution {
 }
 
 // find the common left prefix
+// test [25, 30]
 public class Solution {
     public int rangeBitwiseAnd(int m, int n) {
         int count = 0;
