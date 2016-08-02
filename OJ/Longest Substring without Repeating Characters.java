@@ -42,3 +42,29 @@ public class Solution {
         return max;
     }
 }
+
+public class Solution {
+    /**
+     * @param s: a string
+     * @return: an integer 
+     */
+    public int lengthOfLongestSubstring(String s) {
+        // write your code here
+        int longest = 0;
+        int j = 0;
+        HashSet<Character> set = new HashSet<>();
+        for (int i  = 0; i < s.length(); i++) {
+            while (j < s.length()) {
+                if (!set.add(s.charAt(j))) {
+                    break;
+                }
+                j++;
+            }
+            
+            longest = Math.max(longest, j - i);
+            set.remove(s.charAt(i));
+        }
+        
+        return longest;
+    }
+}

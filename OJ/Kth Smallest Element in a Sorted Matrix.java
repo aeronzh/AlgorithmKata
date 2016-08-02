@@ -18,6 +18,45 @@
 // Hide Company Tags Google
 // Hide Tags Binary Search Heap
 
+// put the first k elements in the first row into heap, than only look at the elements below them
+// because the (k + 1)th is gonna be greater than kth element in the first row 
+public class Solution {
+    /**
+     * @param matrix: a matrix of integers
+     * @param k: an integer
+     * @return: the kth smallest number in the matrix
+     */
+    public int kthSmallest(int[][] matrix, int k) {
+        // write your code here
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) {
+            return 0;
+        }
+        
+        if (matrix.length * matrix[0].length < k) {
+            return 0;
+        }
+        
+        PriorityQueue<Point> heap = new PriorityQueue<Point>(k, new Comparator<Point>() {
+            public int compare(Point a, Point b) {
+                return a.val - b.val;    
+            }
+        });
+        
+        for (int i = 0; i < Math.min(matrix.length, k); i++) {
+            heap.offer(new Point(i, 0, matrix[i][0]));
+        }
+        
+        for (int i = 0; i < k - 1; i++) {
+            Point cur = heap.poll();
+            if (cur.y + 1 < matrix[0].length) {
+                heap.offer(new Point(cur.x, cur.y + 1, matrix[cur.x][cur.y + 1]));
+            }
+        }
+        
+        return heap.peek().val;
+    }
+}
+
 // O(klogk): put the right side element into the heap only if it's on the first row
 public class Solution {
     public int kthSmallest(int[][] matrix, int k) {

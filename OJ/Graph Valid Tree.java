@@ -62,7 +62,7 @@ public class Solution {
             return false;
         }
 
-        List<HashSet<Integer>> graph = new ArrayList<HashSet<Integer>>();
+        List<HashSet<Integer>> graph = new ArrayList<HashSet<Integer>>(); // doesn't need to use hashset here
         for (int i = 0; i < n; i++) {
             graph.add(new HashSet<Integer>());
         }
