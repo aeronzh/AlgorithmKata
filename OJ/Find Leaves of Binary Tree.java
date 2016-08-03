@@ -77,3 +77,32 @@ public class Solution {
         dfs(list, root.right);
     }
 }
+
+// Bottom up D&V
+// Height calculates upside down. i.r. the height of the leave level is 0
+public class Solution {
+    List<List<Integer>> result = new ArrayList<>();
+    public List<List<Integer>> findLeaves(TreeNode root) {
+        dfs(root);
+        return result;
+    }
+    
+    private int dfs(TreeNode root) {
+        if (root == null) {
+            return -1;
+        }
+        
+        int lh = dfs(root.left);
+        int rh = dfs(root.right);
+        int h = Math.max(lh, rh) + 1;
+        
+        // h + 1 because h is 0 based
+        if (result.size() < h + 1) {
+            result.add(new ArrayList<Integer>());
+        }
+        
+        result.get(h).add(root.val);
+        root.left = root.right = null;
+        return h;
+    }
+}
