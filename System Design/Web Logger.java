@@ -59,3 +59,37 @@ public class WebLogger {
         return count;
     }
 }
+
+public class WebLogger {
+    
+    Queue<Integer> queue;
+    
+    public WebLogger() {
+        // initialize your data structure here.
+        queue = new LinkedList<>();
+    }
+
+    /**
+     * @param timestamp an integer
+     * @return void
+     */
+    public void hit(int timestamp) {
+        // Write your code here
+        while (!queue.isEmpty() && queue.peek() <= timestamp - 300) {
+            queue.poll();
+        }
+        queue.offer(timestamp);
+    }
+
+    /**
+     * @param timestamp an integer
+     * @return an integer
+     */
+    public int get_hit_count_in_last_5_minutes(int timestamp) {
+        // Write your code here
+        while (!queue.isEmpty() && queue.peek() <= timestamp - 300) {
+            queue.poll();
+        }
+        return queue.size();
+    }
+}
