@@ -93,15 +93,6 @@ public class Codec {
 
 
 // DFS
-/**
- * Definition for a binary tree node.
- * public class TreeNode {
- *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode(int x) { val = x; }
- * }
- */
 public class Codec {
 
     // Encodes a tree to a single string.
@@ -152,6 +143,42 @@ public class Codec {
     }
 }
 
-// Your Codec object will be instantiated and called as such:
-// Codec codec = new Codec();
-// codec.deserialize(codec.serialize(root));
+// DFS With StringTokenizer
+import java.util.StringTokenizer;
+public class Codec {
+
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        if (root == null) {
+            return "# ";
+        }
+
+        String result = root.val + " ";
+        result += serialize(root.left);
+        result += serialize(root.right);
+
+        return result;
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        StringTokenizer tokenizer = new StringTokenizer(data);
+        return buildTree(tokenizer);
+    }
+
+    private TreeNode buildTree(StringTokenizer tokenizer) {
+        if (!tokenizer.hasMoreTokens()) {
+            return null;
+        }
+
+        String token = tokenizer.nextToken();
+        if (token.equals("#")) {
+            return null;
+        }
+        
+        TreeNode root = new TreeNode(Integer.parseInt(token));
+        root.left = buildTree(tokenizer);
+        root.right = buildTree(tokenizer);
+        return root;
+    }
+}

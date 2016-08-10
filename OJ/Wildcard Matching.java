@@ -76,3 +76,48 @@ public class Solution {
         return false;
     }
 }
+
+// added memoization
+public class Solution {
+    /**
+     * @param s: A string 
+     * @param p: A string includes "?" and "*"
+     * @return: A boolean
+     */
+    public boolean isMatch(String s, String p) {
+        // write your code here
+        return match(s, 0, p, 0, new HashMap<String, Boolean>());
+    }
+    
+    private boolean match(String s, int pos1, String p, int pos2, HashMap<String, Boolean> map) {
+        String key = pos1 + "," + pos2;
+        if (map.containsKey(key)) {
+            return map.get(key);
+        }
+        
+        if (pos2 == p.length()) {
+            return pos1 == s.length();
+        }
+        
+        boolean result = false;
+        if (p.charAt(pos2) == '?') {
+            result = match(s, pos1 + 1, p, pos2 + 1, map);
+        } else if (p.charAt(pos2) == '*') {
+            for (int i = pos1; i <= s.length(); i++) {
+                if (match(s, i, p, pos2 + 1, map)) {
+                    result = true;
+                    break;
+                }
+            }
+        } else {
+            if (pos1 == s.length()) {
+                result = false;
+            } else if (s.charAt(pos1) == p.charAt(pos2)) {
+                result = match(s, pos1 + 1, p, pos2 + 1, map);
+            }
+        }
+        
+        map.put(key, result);
+        return result;
+    }
+}

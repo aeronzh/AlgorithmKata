@@ -174,22 +174,18 @@ public class Solution {
         board[x][y] = 'E';
         
         while (!queue.isEmpty()) {
-            int size = queue.size();
+            int cur = queue.poll();
+            int curX = cur / n;
+            int curY = cur % n;
             
-            for (int i = 0; i < size; i++) {
-                int cur = queue.poll();
-                int curX = cur / n;
-                int curY = cur % n;
+            for (int i = 0; i < 4; i++) {
+                int newX = curX + dx[i];
+                int newY = curY + dy[i];
                 
-                for (int j = 0; j < 4; j++) {
-                    int newX = curX + dx[j];
-                    int newY = curY + dy[j];
-                    
-                    
-                    if (newX >= 0 && newX < m && newY >= 0 && newY < n && board[newX][newY] == 'O') {
-                        board[newX][newY] = 'E';
-                        queue.offer(convert(newX, newY, n));
-                    }
+                
+                if (newX >= 0 && newX < m && newY >= 0 && newY < n && board[newX][newY] == 'O') {
+                    board[newX][newY] = 'E';
+                    queue.offer(convert(newX, newY, n));
                 }
             }
         }
