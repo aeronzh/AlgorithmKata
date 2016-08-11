@@ -46,7 +46,7 @@ class Maze {
     }
 
     private void generate(int x, int y) {
-        visited[x][y] = true;
+        visited[x][y] = true; // each cell can only be visited once, otherwise there is circle (a cell can be seen as a node in a graph)
 
         while (!visited[x - 1][y] || !visited[x + 1][y] || !visited[x][y - 1] || !visited[x][y + 1]) {
             while (true) {
@@ -90,7 +90,7 @@ class Maze {
         }
         done = false;
 
-        solve(1, 1);
+        solve(1, 1); // start: [1, 1]
     }
 
     private void solve(int x, int y) {
@@ -102,12 +102,13 @@ class Maze {
             return;
         }
 
+        // end: [mid, mid]
         if (x == size / 2 + 1 && y == size / 2 + 1) {
             done = true;
             return;
         }
 
-        visited[x][y] = true;
+        visited[x][y] = true; // set to visited to avoid going backwards
 
         if (!north[x][y]) solve(x - 1, y);
         if (!south[x][y]) solve(x + 1, y);
