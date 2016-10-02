@@ -27,8 +27,7 @@ public class Solution {
             }
             i++;
         }
-
-        // if n is not prime, n == 1
+        
         return n > largestPrimeFactor ? n : largestPrimeFactor;
     }
 }
