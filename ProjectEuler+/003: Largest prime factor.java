@@ -27,8 +27,9 @@ public class Solution {
             }
             i++;
         }
-        
-        return n > largestPrimeFactor ? n : largestPrimeFactor;
+
+        // e.g. n == 10, n / 2 = 5, return max(2, 5);
+        return Math.max(n, largestPrimeFactor);
     }
 }
 
