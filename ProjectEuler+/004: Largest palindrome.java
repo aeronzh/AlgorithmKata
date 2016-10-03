@@ -99,10 +99,10 @@ public class Solution {
         int largest = 0;
         for (int i = 100; i <= 999; i++) {
             int inc = 11;
-            int j = 100;
+            int j = 110; // the first 3-digit number divisable by 11
             if (i % 11 == 0) {
                 inc = 1;
-                j = 110;
+                j = 100;
             }
             for ( ; j <= 999; j += inc) {
                 int cur = i * j;
