@@ -41,15 +41,8 @@ public class Solution {
     public int minTransfers(int[][] transactions) {
         Map<Integer, Integer> map = new HashMap<>();
         for (int[] t : transactions) {
-            if (!map.containsKey(t[0])) {
-                map.put(t[0]);
-            }
-            map.put(t[0], map.get(t[0]) - t[3]);
-
-            if (!map.containsKey(t[1])) {
-                map.put(t[1]);
-            }
-            map.put(t[1], map.get(t[1]) + t[3]);
+            map.put(t[0], map.getOrDefault(t[0], 0) - t[3]);
+            map.put(t[1], map.getOrDefault(t[1], 0) + t[3]);
         }
 
         List<Integer> rich = new ArrayList<>();
